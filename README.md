@@ -49,8 +49,6 @@ GitHub -> CI validation -> Terraform apply -> EKS foundation
 ```text
 production-gpu-platform-eks/
 ├── AGENTS.md
-├── codex/
-│   └── PROMPT_CODEX_VALIDATE_REPO.md
 ├── docs/
 │   ├── architecture.md
 │   ├── deployment-order.md

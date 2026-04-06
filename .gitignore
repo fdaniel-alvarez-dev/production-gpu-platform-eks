@@ -30,12 +30,18 @@ kubeconfig.*
 *.kubeconfig
 .kube/
 
+# AWS local credentials/config
+.aws/
+
 # Python
 __pycache__/
 *.pyc
 .venv/
 .pytest_cache/
 .mypy_cache/
+
+# Codex/local prompts (keep out of Git)
+codex/
 
 # Node / frontend (if added later)
 node_modules/
@@ -49,9 +55,13 @@ pnpm-debug.log*
 .idea/
 .DS_Store
 Thumbs.db
+.direnv/
+.envrc
 
 # Misc
 *.log
 *.retry
 *.bak
+*.local
+*.tmp
 *:Zone.Identifier
