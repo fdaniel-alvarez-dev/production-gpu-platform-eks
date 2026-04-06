@@ -1,0 +1,22 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: training-editor
+  namespace: training-prod
+rules:
+  - apiGroups: ["batch"]
+    resources: ["jobs", "cronjobs"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: training-editors
+  namespace: training-prod
+subjects:
+  - kind: Group
+    name: training-team
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: training-editor

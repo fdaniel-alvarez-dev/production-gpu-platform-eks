@@ -1,0 +1,31 @@
+apiVersion: karpenter.sh/v1beta1
+kind: NodePool
+metadata:
+  name: gpu-training
+spec:
+  template:
+    metadata:
+      labels:
+        workload-type: gpu-training
+        accelerator-class: nvidia-training
+    spec:
+      nodeClassRef:
+        name: gpu-training-default
+      requirements:
+        - key: node.kubernetes.io/instance-type
+          operator: In
+          values: ["p4d.24xlarge", "p5.48xlarge"]
+        - key: karpenter.sh/capacity-type
+          operator: In
+          values: ["spot", "on-demand"]
+      taints:
+        - key: nvidia.com/gpu
+          value: training
+          effect: NoSchedule
+        - key: dedicated
+          value: training-workloads
+          effect: NoSchedule
+  disruption:
+    consolidationPolicy: WhenEmpty
+  limits:
+    cpu: "1024"

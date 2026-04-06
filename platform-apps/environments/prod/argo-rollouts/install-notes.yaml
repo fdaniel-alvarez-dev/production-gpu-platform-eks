@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argo-rollouts-notes
+  namespace: argo-rollouts
+data:
+  note: |
+    Install Argo Rollouts with the official chart or manifests before applying any Rollout custom resources.

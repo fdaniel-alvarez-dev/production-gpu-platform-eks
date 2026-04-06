@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: inference-latency-check
+  namespace: inference-gateway
+spec:
+  metrics:
+    - name: p99-latency
+      interval: 1m
+      successCondition: result < 0.2
+      provider:
+        prometheus:
+          address: http://prometheus.monitoring.svc.cluster.local:9090
+          query: |
+            histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{service="inference-gateway"}[1m])) by (le))

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubecost-installation-notes
+  namespace: cost
+data:
+  note: |
+    Install Kubecost with AMP-compatible scraping or the Prometheus source that fits your environment.
+    Enforce namespace and team labels before turning cost dashboards into chargeback reports.

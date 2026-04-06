@@ -1,0 +1,26 @@
+apiVersion: karpenter.sh/v1beta1
+kind: NodePool
+metadata:
+  name: gpu-inference
+spec:
+  template:
+    metadata:
+      labels:
+        workload-type: gpu-inference
+        accelerator-class: nvidia-inference
+    spec:
+      nodeClassRef:
+        name: gpu-inference-default
+      requirements:
+        - key: node.kubernetes.io/instance-type
+          operator: In
+          values: ["g5.xlarge", "g6.xlarge", "g6.2xlarge"]
+        - key: karpenter.sh/capacity-type
+          operator: In
+          values: ["on-demand"]
+      taints:
+        - key: nvidia.com/gpu
+          value: inference
+          effect: NoSchedule
+  limits:
+    cpu: "512"

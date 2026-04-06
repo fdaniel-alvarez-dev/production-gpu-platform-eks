@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ds
+  labels:
+    owner-group: data-science
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: inference-prod
+  labels:
+    owner-group: inference
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: training-prod
+  labels:
+    owner-group: training

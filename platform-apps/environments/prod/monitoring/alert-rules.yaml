@@ -1,0 +1,23 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: gpu-platform-alerts
+  namespace: monitoring
+spec:
+  groups:
+    - name: gpu-platform.rules
+      rules:
+        - alert: GpuXidErrorDetected
+          expr: changes(DCGM_FI_DEV_XID_ERRORS[5m]) > 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: GPU XID error detected
+        - alert: InferenceP99TooHigh
+          expr: histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{service="inference-gateway"}[5m])) by (le)) > 0.2
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: Inference p99 is above target

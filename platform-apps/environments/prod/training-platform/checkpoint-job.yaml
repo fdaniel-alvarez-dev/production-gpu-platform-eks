@@ -1,0 +1,42 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: checkpoint-smoke
+  namespace: training-platform
+  labels:
+    team: platform
+    workload-type: gpu-training
+    model-name: smoke-checkpoint
+spec:
+  template:
+    metadata:
+      labels:
+        team: platform
+        workload-type: gpu-training
+        model-name: smoke-checkpoint
+    spec:
+      restartPolicy: Never
+      priorityClassName: training-high
+      nodeSelector:
+        workload-type: gpu-training
+      tolerations:
+        - key: nvidia.com/gpu
+          operator: Equal
+          value: training
+          effect: NoSchedule
+        - key: dedicated
+          operator: Equal
+          value: training-workloads
+          effect: NoSchedule
+      containers:
+        - name: trainer
+          image: 123456789012.dkr.ecr.us-east-1.amazonaws.com/gpu-platform/prod/training-runner:sha-REPLACE_ME
+          args: ["python", "train.py"]
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+              cpu: "4"
+              memory: 16Gi
+          env:
+            - name: CHECKPOINT_BUCKET
+              value: gpu-platform-prod-checkpoints

@@ -1,0 +1,78 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: platform-bootstrap
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: gpu-operator
+            path: platform-apps/environments/prod/gpu-operator
+            wave: "1"
+            project: gpu-platform
+            namespace: gpu-operator
+          - name: karpenter
+            path: platform-apps/environments/prod/karpenter
+            wave: "1"
+            project: gpu-platform
+            namespace: karpenter
+          - name: storage-primitives
+            path: platform-apps/environments/prod/storage-primitives
+            wave: "2"
+            project: platform-core
+            namespace: storage-primitives
+          - name: argo-rollouts
+            path: platform-apps/environments/prod/argo-rollouts
+            wave: "2"
+            project: platform-core
+            namespace: argo-rollouts
+          - name: monitoring
+            path: platform-apps/environments/prod/monitoring
+            wave: "2"
+            project: observability
+            namespace: monitoring
+          - name: security
+            path: platform-apps/environments/prod/security
+            wave: "2"
+            project: security
+            namespace: security
+          - name: training-platform
+            path: platform-apps/environments/prod/training-platform
+            wave: "3"
+            project: training
+            namespace: training-platform
+          - name: inference-gateway
+            path: platform-apps/environments/prod/inference-gateway
+            wave: "4"
+            project: inference
+            namespace: inference-gateway
+          - name: cost
+            path: platform-apps/environments/prod/cost
+            wave: "4"
+            project: platform-core
+            namespace: cost
+          - name: tenancy
+            path: platform-gitops/tenancy
+            wave: "5"
+            project: tenancy
+            namespace: argocd
+  template:
+    metadata:
+      name: '{{name}}'
+      annotations:
+        argocd.argoproj.io/sync-wave: '{{wave}}'
+    spec:
+      project: '{{project}}'
+      source:
+        repoURL: ${REPO_URL}
+        targetRevision: main
+        path: '{{path}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{namespace}}'
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+          - PrunePropagationPolicy=foreground
+          - PruneLast=true

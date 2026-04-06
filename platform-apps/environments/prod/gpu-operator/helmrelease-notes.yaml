@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gpu-operator-installation-notes
+  namespace: gpu-operator
+data:
+  note: |
+    Install the NVIDIA GPU Operator using the official Helm chart and the values under this path.
+    In production, pin the chart version and the driver version. If your AMI already ships the NVIDIA driver,
+    set driver.enabled=false explicitly and validate containerd toolkit behavior before go-live.

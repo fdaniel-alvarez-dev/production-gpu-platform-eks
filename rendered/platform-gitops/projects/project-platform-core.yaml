@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: platform-core
+  namespace: argocd
+spec:
+  description: Core platform components and bootstrap controllers
+  sourceRepos:
+    - https://github.com/fdaniel-alvarez-dev/production-gpu-platform-eks.git
+  destinations:
+    - namespace: argocd
+      server: https://kubernetes.default.svc
+    - namespace: kube-system
+      server: https://kubernetes.default.svc
+    - namespace: argo-rollouts
+      server: https://kubernetes.default.svc
+    - namespace: storage-primitives
+      server: https://kubernetes.default.svc
+    - namespace: cost
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+    - group: storage.k8s.io
+      kind: StorageClass
+    - group: argoproj.io
+      kind: '*'
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'

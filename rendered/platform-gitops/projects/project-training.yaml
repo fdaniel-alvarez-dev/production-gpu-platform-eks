@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: training
+  namespace: argocd
+spec:
+  description: Training platform and GPU jobs
+  sourceRepos:
+    - https://github.com/fdaniel-alvarez-dev/production-gpu-platform-eks.git
+  destinations:
+    - namespace: training-platform
+      server: https://kubernetes.default.svc
+    - namespace: training
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+    - group: scheduling.k8s.io
+      kind: PriorityClass
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'

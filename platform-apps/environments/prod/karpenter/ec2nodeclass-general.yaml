@@ -1,0 +1,15 @@
+apiVersion: karpenter.k8s.aws/v1beta1
+kind: EC2NodeClass
+metadata:
+  name: general-default
+spec:
+  amiFamily: AL2023
+  role: gpu-platform-prod-general
+  subnetSelectorTerms:
+    - tags:
+        Tier: private
+  securityGroupSelectorTerms:
+    - tags:
+        Name: gpu-platform-prod-nodes-sg
+  tags:
+    workload-type: general

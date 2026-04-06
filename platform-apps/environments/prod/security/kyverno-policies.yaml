@@ -1,0 +1,41 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-basic-labels
+spec:
+  validationFailureAction: Audit
+  rules:
+    - name: check-required-labels
+      match:
+        resources:
+          kinds: [Pod]
+      validate:
+        message: team, workload-type, and model-name labels are required.
+        pattern:
+          metadata:
+            labels:
+              team: "?*"
+              workload-type: "?*"
+              model-name: "?*"
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: deny-latest-in-production
+spec:
+  validationFailureAction: Audit
+  rules:
+    - name: no-latest-tag
+      match:
+        resources:
+          kinds: [Pod]
+      validate:
+        message: latest tags are not allowed in production.
+        foreach:
+          - list: "request.object.spec.containers"
+            deny:
+              conditions:
+                all:
+                  - key: "{{ regex_match('^.+:latest$', element.image) }}"
+                    operator: Equals
+                    value: true

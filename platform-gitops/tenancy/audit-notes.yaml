@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: audit-log-notes
+  namespace: argocd
+data:
+  note: |
+    Enable EKS control plane logging for api, audit, authenticator, controllerManager, and scheduler.
+    Ship evidence to the central log backend used by the organization.

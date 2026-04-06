@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: scale-down-dev-after-hours
+  namespace: cost
+spec:
+  schedule: "0 19 * * 1-5"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: platform-ops
+          containers:
+            - name: kubectl
+              image: public.ecr.aws/bitnami/kubectl:1.30
+              command:
+                - /bin/sh
+                - -c
+                - kubectl scale deployment --all --replicas=0 -n ds

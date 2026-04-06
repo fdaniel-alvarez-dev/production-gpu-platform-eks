@@ -1,0 +1,8 @@
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: training-high
+value: 900000
+preemptionPolicy: Never
+globalDefault: false
+description: High priority for critical training jobs without aggressive preemption.

@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: tenancy
+  namespace: argocd
+spec:
+  description: Team namespaces, quotas, and RBAC boundaries
+  sourceRepos:
+    - https://github.com/fdaniel-alvarez-dev/production-gpu-platform-eks.git
+  destinations:
+    - namespace: argocd
+      server: https://kubernetes.default.svc
+    - namespace: ds
+      server: https://kubernetes.default.svc
+    - namespace: inference-prod
+      server: https://kubernetes.default.svc
+    - namespace: training-prod
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'

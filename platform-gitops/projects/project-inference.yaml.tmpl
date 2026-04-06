@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: inference
+  namespace: argocd
+spec:
+  description: Inference workloads and gateways
+  sourceRepos:
+    - ${REPO_URL}
+  destinations:
+    - namespace: inference-gateway
+      server: https://kubernetes.default.svc
+    - namespace: inference
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
