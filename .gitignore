@@ -43,6 +43,9 @@ __pycache__/
 # Codex/local prompts (keep out of Git)
 codex/
 
+# Local repo agent instructions (do not commit)
+AGENTS.md
+
 # Node / frontend (if added later)
 node_modules/
 npm-debug.log*
